@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Socialite;
+use App\User;
+use Validator;
 
 class SocialLoginController extends Controller
 {
@@ -21,26 +23,28 @@ class SocialLoginController extends Controller
     public function handleProviderCallback($provider)
     {
         $getInfo = Socialite::driver($provider)->user();
-     
-        $user = $this->createUser($getInfo, $provider);
-        return $user;
- 
-        //auth()->login($user);
- 
-        //return redirect()->to('/home');
+        $user = User::where('social_id', $getInfo->id)->Where('email', $getInfo->email)->first();
+        if (!User::Where('email', $getInfo->email)->first()) {
+            $user = $this->createUser($getInfo, $provider);
+            auth()->login($user);
+            return redirect()->to('/home');
+        } elseif ($user) {
+            auth()->login($user);
+            return redirect()->to('/home');
+        } else {
+            $error = "email was found";
+            return redirect()->to('/login')->withErrors(['msg'=>$error]);
+        }
     }
     public function createUser($getInfo, $provider)
     {
-        $user = User::where('social_id', $getInfo->id)->where('email',$getInfo->email)->first();
- 
-        if (!$user) {
-            $user = User::create([
+        $user = User::create([
                 'name'     => $getInfo->name,
                 'email'    => $getInfo->email,
-                'socail_type' => $provider,
+                'social_type' => $provider,
                 'social_id' => $getInfo->id
             ]);
-        }
+        $user->markEmailAsVerified();
         return $user;
     }
 }

@@ -4,9 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+                @error('msg')
+                <div class="alert alert-danger" role="alert">
+                {{$message}}
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
+                </div>
+                @enderror
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -65,6 +69,15 @@
                             </div>
                         </div>
                     </form>
+                    <hr>
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6">
+                                <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary btn-block"> Facebook</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="{{ url('/auth/redirect/google') }}" class="btn btn-danger btn-block"> Google</a>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

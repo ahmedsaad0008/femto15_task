@@ -18,9 +18,9 @@ class UserController extends Controller
     {
         $users = User::when(request()->has('query'), function ($q) {
             $q->where('name', 'LIKE', '%'.request('query').'%')
-            ->orWhere('name', 'LIKE', '%'.request('query').'%');
+            ->orWhere('email', 'LIKE', '%'.request('query').'%');
         })->paginate(30);
-        return view('user.index',compact($users));
+        return view('user.index',compact('users'));
     }
 
     /**
@@ -89,9 +89,9 @@ class UserController extends Controller
 				'email' => request('email'),
 				'password' => Hash::make(request('password')),
 			]);
-			return redirect('/users')->with('success', 'user has been updated');
+			return redirect('/user')->with('success', 'user has been updated');
 		} else {
-			return redirect('/users/' . $id . '/edit')->with('errors', $vresult->errors());
+			return redirect('/user/' . $id . '/edit')->with('errors', $vresult->errors());
 		}
     }
 
@@ -105,7 +105,7 @@ class UserController extends Controller
     {
         $user=User::find($id);
         $user->delete();
-        return redirect('/users')->with('success', 'user has been deleted Successfully');
+        return redirect('/user')->with('success', 'user has been deleted Successfully');
     }
 
     /**
@@ -114,12 +114,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deactive($id)
+    public function deactivate($id)
     {
         $user=User::find($id);
-        $deactive = $user->update(['active'=>false]);
-        if ($deactive) {
-            return redirect('/users')->with('success', 'user has been deactivated Successfully');
+        $deactivate = $user->update(
+            ['active'=>false]);
+        if ($deactivate) {
+            return back();
         }
     }
 
@@ -129,12 +130,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function active($id)
+    public function activate($id)
     {
         $user=User::find($id);
-        $active = $user->update(['active'=>true]);
-        if ($active) {
-            return redirect('/users')->with('success', 'user has been activated Successfully');
+        $activate = $user->update(['active'=>true]);
+        if ($activate) {
+            return back();
         }
     }
 

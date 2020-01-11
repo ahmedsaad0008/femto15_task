@@ -17,9 +17,12 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 Route::get('/auth/redirect/{provider}', 'Auth\SocialLoginController@redirectToProvider');
-Route::get('/callback/{provider}', 'Auth\SocialLoginController@callback');
+Route::get('/callback/{provider}', 'Auth\SocialLoginController@handleProviderCallback');
+Route::resource('user','UserController')->except(['show','create','store']);
+Route::post('user/{id}/activate','UserController@activate')->name('user.activate');
+Route::post('user/{id}/deactivate','UserController@deactivate')->name('user.deactivate');
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('payment', 'SubscribeController@payment');
-Route::post('subscribe', 'SubscribeController@subscribe');
+Route::get('/home', 'HomeController@index')->name('home')->middleware(['auth:customer','check-subscription']);
+Route::get('payment', 'SubscribeController@payment')->middleware('auth:customer');
+Route::post('subscribe', 'SubscribeController@subscribe')->middleware('auth:customer');

@@ -78,9 +78,8 @@
             const cardButton = document.getElementById('card-button');
             const clientSecret = cardButton.dataset.secret;
 
-            const plan = document.getElementById('subscription-plan').value;
-
             cardButton.addEventListener('click', async (e) => {
+                const plan = document.getElementById('subscription-plan').value;
                 const { setupIntent, error } = await stripe.handleCardSetup(
                     clientSecret, cardElement, {
                         payment_method_data: {
