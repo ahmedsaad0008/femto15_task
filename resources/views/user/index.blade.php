@@ -4,6 +4,16 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <form action="{{ url('/user') }}" method="GET">
+                <div class="row mb-2">
+                    <div class="col-md-8">
+                        <input class="form-control" type="text" placeholder="Search.." value="{{ old('query') }}" name="query">
+                    </div>
+                    <div class="col-md-4">
+                         <button type="submit" class="btn btn-info btn-block">Search</button>
+                    </div>
+                </div>
+            </form>
             <table class="table table-sm">
                 <thead>
                     <tr>

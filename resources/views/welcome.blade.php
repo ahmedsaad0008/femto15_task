@@ -65,19 +65,22 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
+            <div class="top-right links">
+           @if(Auth::guard('customer')->check())
+                    <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-
+                    <a href="{{ route('login') }}">Login</a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}">Register</a>
                         @endif
-                    @endauth
+                    @endif
+                    @if(Auth::guard('admin')->check())
+                    <a href="{{ url('/user') }}">Users</a>
+                    <a href="{{ url('/user/chart/show') }}">User Chart</a>
+                    @else
+                     <a href="{{ url('admin/login') }}">Admin Login</a>
+                    @endif
                 </div>
-            @endif
 
             <div class="content">
                 <div class="title m-b-md">
