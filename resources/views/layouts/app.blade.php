@@ -14,7 +14,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
@@ -52,11 +52,15 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/user') }}">Users</a>
+                                    <a class="dropdown-item" href="{{ url('/user/chart/show') }}">User Chart</a>
                                     <a class="dropdown-item" href="{{ url('admin/logout') }}">
                                         {{ __('Logout') }}
                                     </a>
+
                                 </div>
                             </li>
+
                         @endif
                         @if(!Auth::guard('customer')->check())
                             <li class="nav-item">
